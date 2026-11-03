@@ -63,7 +63,8 @@ def main(argv=None):
 
     elif a.step == "upload":
         from .upload import transfer
-        manifest = pd.read_csv(res / "manifest.csv", dtype=str)
+        from .select_images import full_manifest_path
+        manifest = pd.read_csv(full_manifest_path(cfg, ROOT), dtype=str)
         if a.classes:
             manifest = manifest[manifest["class"].isin(a.classes.split(","))]
         done = transfer(cfg, manifest, ROOT, runs_selected(cfg, a.only), a.max_seconds)

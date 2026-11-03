@@ -29,6 +29,12 @@ import pandas as pd
 
 from .api import Api
 
+PUBLIC_COLUMNS = ["class", "tag", "in_model", "file_name"]
+
+
+def full_manifest_path(cfg, root):
+    return Path(root) / "state" / cfg["test_set"] / "manifest_full.csv"
+
 
 def _download_sources(cfg, root):
     out = Path(root) / "state" / cfg["test_set"] / "sources"
@@ -141,15 +147,22 @@ def select(cfg, root, config_path=None):
         print(f"  {cls:32s} {len(picked):4d} images from {sub['locationName'].nunique()} cameras "
               f"({len(sub)} validated available)")
     man = pd.DataFrame(rows)
-    man.to_csv(res / "manifest.csv", index=False)
-    print(f"manifest: {len(man)} images, {man['class'].nunique()} classes -> {res / 'manifest.csv'}")
+    # Full manifest (source cameras, sequences, timestamps, validators, media URLs) is
+    # private: kept in state/ (git-ignored). The public manifest has no personal names,
+    # locations, timestamps or internal links.
+    private = root / "state" / cfg["test_set"] / "manifest_full.csv"
+    private.parent.mkdir(parents=True, exist_ok=True)
+    man.to_csv(private, index=False)
+    man[PUBLIC_COLUMNS].to_csv(res / "manifest.csv", index=False)
+    print(f"manifest: {len(man)} images, {man['class'].nunique()} classes -> {private} (private), "
+          f"{res / 'manifest.csv'} (public)")
     return man
 
 
 def fetch(cfg, root, classes=None):
     """Download manifest images not yet on disk (used for local copies; upload streams on its own)."""
     root = Path(root)
-    man = pd.read_csv(root / "results" / cfg["test_set"] / "manifest.csv", dtype=str)
+    man = pd.read_csv(full_manifest_path(cfg, root), dtype=str)
     if classes:
         man = man[man["class"].isin(classes)]
     apis = {}

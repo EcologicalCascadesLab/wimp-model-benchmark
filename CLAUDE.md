@@ -4,7 +4,7 @@ Purpose: benchmark the WildObs WIMP computer-vision models (MegaDetector + speci
 
 ## Hard rules
 
-- Never commit API keys, tokens, images or Camtrap DP exports. Keys come only from the environment variables `WIMP_PROD_KEY` and `WIMP_TEST_KEY`. Images live in `data/` and exports in `Input_Data/`, both git-ignored.
+- Never commit API keys, tokens, images or Camtrap DP exports, and never commit personal names, camera/location names, coordinates, timestamps or media URLs from source projects (sensitive species and Indigenous data). The full image manifest stays in `state/` (git-ignored). Keys come only from the environment variables `WIMP_PROD_KEY` and `WIMP_TEST_KEY`. Images live in `data/` and exports in `Input_Data/`, both git-ignored.
 - Never edit `vendor/model-benchmark-testing-workflow` (Colin's repo, a pinned submodule). Extend it from `wimpbench/`; propose upstream changes as notes in `docs/upstream_suggestions.md`.
 - Never write to the source projects the validated images come from (e.g. Skye's AWT projects). They are read-only: GET requests only.
 - Only write to projects listed under `runs:` in the active config. Check the project ID before every write.
@@ -24,7 +24,7 @@ The cloud environment must allow `api.wimp.wildobs.org.au`, `api.wimp.test.wildo
 
 ## Outputs to commit
 
-`results/<set>/`: Colin's HTML reports, `detector_metrics.csv`, `summary.csv`, `dashboard.html`, and the image manifest `manifest.csv` (file names and labels only). Update `docs/` and the results table in `README.md` in the same commit. Commit after each finished step with a message saying what was run.
+`results/<set>/`: Colin's HTML reports, `detector_metrics.csv`, `summary.csv`, `dashboard.html`, and the public image manifest `manifest.csv` (file name and class only). Update `docs/` and the results table in `README.md` in the same commit. Commit after each finished step with a message saying what was run.
 
 ## Documentation style
 

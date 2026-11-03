@@ -67,8 +67,11 @@ train any WildObs model (M. Luskin, 3 Nov 2026).
 "In model" was judged from the labels the Wet Tropics model writes on TEST; the
 model's own label list should be confirmed with QCIF.
 
-`results/awt_2026_11/manifest.csv` lists every image (file, class, source camera,
-sequence and project). `class_availability.csv` lists every validated label and
+`results/awt_2026_11/manifest.csv` (public) lists every image by file name and class
+only. The full manifest, with source camera, sequence, timestamp, validator and media
+link, is kept privately (`state/<set>/manifest_full.csv`, git-ignored; a copy is in the
+WildObs Dropbox benchmark folder) because it contains personal names and camera
+locations of threatened species. `class_availability.csv` lists every validated label and
 how many images exist, for choosing classes in later test sets.
 
 ## Known issues

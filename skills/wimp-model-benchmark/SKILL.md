@@ -16,7 +16,8 @@ holds the hard rules and `docs/` the method. Do not restate them here.
 1. Validated images: either source WIMP project(s) already sorted by people
    (preferred: `select` finds and samples them) or a folder with one subfolder per class.
 2. Benchmark project metadata (names, environment, organisation).
-3. The image spreadsheet: written by `select` as `results/<set>/manifest.csv`, or
+3. The image spreadsheet: written by `select` (full, private: `state/<set>/manifest_full.csv`;
+   public: `results/<set>/manifest.csv`, file name and class only), or
    supplied by the user (`config/inputs_template/validated_images.csv`).
 4. Models to test: classifier + detector threshold + environment per run.
 
@@ -54,7 +55,8 @@ them if so.
 6. **Export and evaluate.** `export`, then `evaluate`. Outputs in `results/<set>/`:
    Colin's HTML reports and comparison report, detector metrics, species metrics,
    `dashboard.html`.
-7. **Report.** Commit results (never images, exports or keys) and push. Tell the user
+7. **Report.** Commit results (never images, exports, keys, personal names, camera names,
+   timestamps or media links) and push. Tick *Restricted images* on every benchmark project. Tell the user
    the headline per model in plain words, link the dashboard, and list caveats (small
    classes, classes outside the model).
 

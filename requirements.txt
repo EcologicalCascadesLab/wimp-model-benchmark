@@ -1,8 +1,9 @@
-requests
-pandas
-pyyaml
+# Pinned versions tested on 3 Nov 2026 (update deliberately, then rerun the benchmark)
+requests==2.34.2
+pandas==3.0.5
+PyYAML==6.0.3
 # Colin's evaluation workflow (vendor/model-benchmark-testing-workflow/requirements.txt)
-ipywidgets
-markdown
-latex2mathml
-galah
+ipywidgets==8.1.9
+Markdown==3.11
+latex2mathml==3.81.1
+galah==0.1.3
