@@ -2,6 +2,8 @@
 
 How well are the computer-vision (CV) models on the WildObs Image Management Platform (WIMP) performing? This repository automates the full benchmark: a set of human-validated camera-trap images goes in, and per-model evaluation reports and a comparison dashboard come out. The person running it does no programming.
 
+**Dashboard (web):** https://ecologicalcascadeslab.github.io/wimp-model-benchmark/
+
 It extends Colin Broughton's [model-benchmark-testing-workflow](https://github.com/WildObs/model-benchmark-testing-workflow), which scores Camtrap DP exports against known labels (recall, precision, F1 by confidence threshold). That repository is used unchanged, as a pinned git submodule in `vendor/`. This repository adds everything before and after Colin's evaluation step:
 
 1. assembling a validated test set from existing WIMP projects,
