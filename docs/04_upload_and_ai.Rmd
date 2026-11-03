@@ -32,10 +32,13 @@ subprocess.run(["python", "-m", "wimpbench", "status", "--config", "config/awt_2
 
 ## Timing (AWT, 3 Nov 2026)
 
-4,399 images x 5 projects = 22,000 uploads. From the cloud workspace this ran at
-roughly 40 source images a minute with 6 parallel batches (each image goes to five
-projects). A pilot class (Wallabia bicolor, 60 images) reached AI processing in
-all five projects within a minute of finalizing.
+4,399 images x 5 projects = 21,995 uploads, streamed from the cloud workspace with
+12 parallel batches in about 85 minutes (about 55 source images a minute, each going
+to five projects; peak local disk use under 200 MB). WIMP answered 5 batches with
+`500 Unexpected error during upload`; each was retried on the next pass and every
+deployment ended with exactly the manifest count (checked with `status`). The AI
+keeps pace on PROD; TEST queues deployments and finishes later. A pilot class
+(Wallabia bicolor, 60 images) reached AI processing within a minute of finalizing.
 
 ## Known issues
 

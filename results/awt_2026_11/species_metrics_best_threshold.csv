@@ -1,0 +1,7 @@
+run,species,model_confidence,recall,precision,f1_score
+WildObs_QLD WetTropics | MD default (PROD),Blank,>=0.5,0.004,1.0,0.0079
+WildObs_QLD WetTropics | MD default (PROD),Homo sapiens,>=0.5,0.0,0.0,0.0
+WildObs_QLD WetTropics | MD default (PROD),Wallabia bicolor,>=0.5,0.3667,0.9565,0.5301
+Megadetector V6 | MD default (PROD),Blank,>=0.5,0.004,1.0,0.008
+Megadetector V6 | MD default (PROD),Homo sapiens,>=0.5,0.0,0.0,0.0
+Megadetector V6 | MD default (PROD),Wallabia bicolor,>=0.5,0.0,0.0,0.0

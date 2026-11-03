@@ -1,0 +1,9 @@
+run,class,n_images,tp,recall,precision,f1,env,detector_threshold,unclassified_share
+prod_awt_default,animal,60,44,0.7333333333333333,0.5641025641025641,0.6376811594202899,prod,default,0.6982142857142857
+prod_awt_default,human,250,0,0.0,0.0,,prod,default,0.6982142857142857
+prod_awt_default,vehicle,0,0,,0.0,,prod,default,0.6982142857142857
+prod_awt_default,blank,250,43,0.172,0.9148936170212766,0.2895622895622895,prod,default,0.6982142857142857
+prod_md_v6,animal,60,0,0.0,,,prod,default,0.7946428571428571
+prod_md_v6,human,250,0,0.0,0.0,,prod,default,0.7946428571428571
+prod_md_v6,vehicle,0,0,,0.0,,prod,default,0.7946428571428571
+prod_md_v6,blank,250,86,0.344,0.9555555555555556,0.5058823529411764,prod,default,0.7946428571428571
