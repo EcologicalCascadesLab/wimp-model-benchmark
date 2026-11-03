@@ -1,0 +1,2 @@
+run_id,env,project_name,owner_email,organisation,location_name,latitude,longitude,utc_offset,notes
+run1,prod,Model benchmark testing: National (PROD default),you@example.org,Your organisation,Benchmark,-27.50,153.01,+10:00,"One location is enough; deployments are one per class"

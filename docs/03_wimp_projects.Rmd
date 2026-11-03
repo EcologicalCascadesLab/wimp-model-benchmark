@@ -1,0 +1,43 @@
+---
+title: "Step 3. Create the benchmark projects on WIMP"
+output: html_document
+---
+
+## Purpose
+
+Each model run needs its own WIMP project, because the AI model and the detector
+threshold are project settings. The WIMP API cannot create projects or change
+these settings, so this is the one step done in the WIMP web interface. It takes
+about two minutes per project.
+
+## Settings for every benchmark project
+
+| Setting | Value | Why |
+|---|---|---|
+| Name | `Model benchmark testing: <classifier>, <detector setting>` | Matches `runs[].project_name` in the config |
+| Sequence cutoff | **0 seconds** | Every image is its own sequence, so images are scored independently (Colin's method) |
+| AI model / classifier | The model under test (e.g. Wet Tropics) | One model per project |
+| Detector confidence threshold (TEST only, since 27 Oct 2026) | The value under test (0.25, 0.50, 0.75) | Leave at default on PROD |
+| Automatic AI | On | The API also sets `automaticAi` on each deployment |
+| Species tags | Created by the API from the class list | No manual tagging needed |
+
+## AWT test set (November 2026)
+
+| Run | Site | Detector threshold |
+|---|---|---|
+| prod_awt_default | wimp.wildobs.org.au | default |
+| test_awt_md025 | wimp.test.wildobs.org.au | 0.25 |
+| test_awt_md050 | wimp.test.wildobs.org.au | 0.50 |
+| test_awt_md075 | wimp.test.wildobs.org.au | 0.75 |
+
+After creating each project, copy its ID from the address bar
+(`/project/<id>/...`) into `project_id` for that run in `config/awt_2026_11.yaml`.
+
+## Check
+
+```{python eval=FALSE}
+!python -m wimpbench check --config config/awt_2026_11.yaml
+```
+
+`check` lists each run with the project name it found for that ID and stops if a
+name does not match the config.

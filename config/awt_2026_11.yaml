@@ -1,0 +1,62 @@
+# Benchmark run specification: Australian Wet Tropics, November 2026
+test_set: awt_2026_11
+description: >
+  Wet Tropics classifier and MegaDetector benchmark on human-validated images
+  from Skye Anderson's AWT camera-trap projects (PROD and TEST).
+data_source_location: Australian Wet Tropics, Queensland
+data_collation_process: >
+  Images drawn from sequences that a person validated on WIMP, sampled across
+  cameras and sequences (at most `max_per_sequence` images from any one sequence).
+
+# Where the validated images come from (read-only). Project IDs are filled in by `select`.
+sources:
+  - env: prod
+    project_name_contains: "Skye"
+    project_id: ""
+  - env: test
+    project_name_contains: "Skye"
+    project_id: ""
+
+sampling:
+  per_class: 250
+  max_per_sequence: 2        # spread the sample across sequences
+  max_share_per_camera: 0.2  # no camera supplies more than 20% of a class
+  seed: 20261103
+  # class name in the test set -> scientific name(s) as stored on WIMP.
+  # Filled from the AWT model label list and Skye's species counts by `select`.
+  classes: {}
+
+# One benchmark project per model run. Projects are created in the WIMP UI
+# (docs/03_wimp_projects.Rmd); paste each project_id here afterwards.
+project_settings:
+  sequence_cutoff_seconds: 0
+runs:
+  - id: prod_awt_default
+    env: prod
+    project_name: "Model benchmark testing: Wet Tropics (PROD default)"
+    classifier: Wet Tropics
+    detector_threshold: default
+    project_id: ""
+  - id: test_awt_md025
+    env: test
+    project_name: "Model benchmark testing: Wet Tropics, MegaDetector 0.25"
+    classifier: Wet Tropics
+    detector_threshold: 0.25
+    project_id: ""
+  - id: test_awt_md050
+    env: test
+    project_name: "Model benchmark testing: Wet Tropics, MegaDetector 0.50"
+    classifier: Wet Tropics
+    detector_threshold: 0.50
+    project_id: ""
+  - id: test_awt_md075
+    env: test
+    project_name: "Model benchmark testing: Wet Tropics, MegaDetector 0.75"
+    classifier: Wet Tropics
+    detector_threshold: 0.75
+    project_id: ""
+
+evaluation:
+  thresholds: [0.5, 0.6, 0.7, 0.8, 0.9]
+  observation_level: event
+  template: full

@@ -1,0 +1,8 @@
+requests
+pandas
+pyyaml
+# Colin's evaluation workflow (vendor/model-benchmark-testing-workflow/requirements.txt)
+ipywidgets
+markdown
+latex2mathml
+galah

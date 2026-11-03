@@ -1,0 +1,3 @@
+[submodule "vendor/model-benchmark-testing-workflow"]
+	path = vendor/model-benchmark-testing-workflow
+	url = https://github.com/WildObs/model-benchmark-testing-workflow.git

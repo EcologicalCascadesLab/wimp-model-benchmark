@@ -1,0 +1,24 @@
+# secrets
+*.key
+.env
+.wimp/
+
+# images, exports, state
+data/
+Input_Data/*
+!Input_Data/.gitkeep
+state/
+logs/
+*.zip
+
+# python
+__pycache__/
+*.pyc
+.ipynb_checkpoints/
+.venv/
+
+# R
+.Rproj.user/
+.Rhistory
+docs/*_cache/
+docs/*.html

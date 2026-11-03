@@ -1,0 +1,12 @@
+# Models to benchmark: one entry per WIMP project to create.
+# env: prod or test. classifier: the WIMP AI model name as shown in project settings.
+# detector_threshold: "default" or a number between 0 and 1 (TEST only for now).
+runs:
+  - id: run1
+    env: prod
+    classifier: National
+    detector_threshold: default
+  - id: run2
+    env: test
+    classifier: National
+    detector_threshold: 0.5
