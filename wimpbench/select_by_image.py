@@ -35,6 +35,9 @@ def source_export(cfg, root, poll_seconds=30, max_wait=3 * 3600):
         env, pid = src["env"], src["project_id"]
         run_ids = {r["project_id"] for r in cfg["runs"]}
         assert pid not in run_ids, "a source project must not also be a run project"
+        if src.get("bbox_export") is False:
+            print(f"  {env} source: no bounding-box export (bbox_export: false); middle-image fallback")
+            continue
         out = _export_dir(cfg, root, src)
         out.mkdir(parents=True, exist_ok=True)
         if (out / "observations.csv").exists():
@@ -43,7 +46,7 @@ def source_export(cfg, root, poll_seconds=30, max_wait=3 * 3600):
         api = Api(env)
         rec = out / "export.json"
         existing = [e for e in api.get(f"/projects/{pid}/exports")
-                    if e.get("includeBoundingBoxes") and e.get("status") in ("Completed", "Pending", "Running")]
+                    if e.get("includeBoundingBoxes") and e.get("status") in ("Completed", "Pending", "Started", "Running")]
         if rec.exists():
             exp_id = json.loads(rec.read_text())["id"]
         elif existing:  # e.g. made in the WIMP web UI: reuse it, no new write
@@ -91,6 +94,8 @@ def media_scores(cfg, root):
     """Per media file and box type, the highest detector score in the source exports."""
     parts = []
     for src in cfg["sources"]:
+        if src.get("bbox_export") is False:
+            continue
         o = pd.read_csv(_export_dir(cfg, root, src) / "observations.csv", dtype=str)
         o = o[o["observationLevel"].eq("media") & o["mediaID"].notna()]
         o = o[o["bboxX"].notna()] if "bboxX" in o else o
@@ -132,11 +137,12 @@ def select_by_image(cfg, root):
     sc = sc.pivot_table(index=["source_env", "mediaID"], columns="box_type", values="score").reset_index()
     media = media.merge(sc, on=["source_env", "mediaID"], how="left")
 
+    no_scores = {s["env"] for s in cfg["sources"] if s.get("bbox_export") is False}
     rows, summary = [], []
     by_seq = {k: g for k, g in media.groupby(["source_env", "sequence_id"])}
     for cls, spec in classes.items():
         cs = seqs[seqs["class"].eq(cls)]
-        n_score = n_fallback = n_missing = 0
+        n_score = n_fallback = n_noscore = n_missing = 0
         for s in cs.itertuples(index=False):
             g = by_seq.get((s.source_env, s.source_sequence))
             if g is None or not len(g):
@@ -145,7 +151,9 @@ def select_by_image(cfg, root):
             g = g.sort_values(["timestamp", "fileName"]).reset_index(drop=True)
             middle = g.iloc[(len(g) - 1) // 2]
             rule, pick, score = "middle", middle, None
-            if cls != "Blank":
+            if cls != "Blank" and s.source_env in no_scores:
+                rule = "middle_no_source_scores"
+            elif cls != "Blank":
                 col = BOX_TYPE.get(cls, "animal")
                 if col in g and g[col].notna().any():
                     i = g[col].idxmax()
@@ -156,9 +164,11 @@ def select_by_image(cfg, root):
                 n_score += 1
             elif rule == "fallback_middle":
                 n_fallback += 1
+            elif rule == "middle_no_source_scores":
+                n_noscore += 1
             rows.append({
                 "class": cls, "tag": spec["tag"], "in_model": spec.get("in_model", True),
-                "file_name": pick.fileName, "source_label": s.source_label if hasattr(s, "source_label") else cls,
+                "file_name": pick.fileName, "source_label": cls,
                 "source_camera": pick.locationName, "source_sequence": s.source_sequence,
                 "source_media_id": pick.mediaID, "source_env": s.source_env,
                 "source_project": pick.source_project, "source_classified_by": pick.source_classified_by,
@@ -167,9 +177,12 @@ def select_by_image(cfg, root):
                 "pick_score": score, "pick_rule": rule, "sequence_images": len(g),
             })
         summary.append({"class": cls, "sequences": len(cs), "picked_by_score": n_score,
-                        "middle_blank": len(cs) - n_score - n_fallback - n_missing if cls == "Blank" else 0,
-                        "fallback_middle": n_fallback, "sequence_not_found": n_missing})
-        print(f"  {cls:28s} {len(cs):4d} sequences: {n_score} by score, {n_fallback} fallback, {n_missing} missing")
+                        "middle_blank": len(cs) - n_missing if cls == "Blank" else 0,
+                        "fallback_no_scored_box": n_fallback,
+                        "fallback_no_source_scores": n_noscore,
+                        "sequence_not_found": n_missing})
+        print(f"  {cls:28s} {len(cs):4d} sequences: {n_score} by score, {n_fallback} no box, "
+              f"{n_noscore} no source scores, {n_missing} missing")
     man = pd.DataFrame(rows)
     private = root / "state" / cfg["test_set"] / "manifest_full.csv"
     private.parent.mkdir(parents=True, exist_ok=True)

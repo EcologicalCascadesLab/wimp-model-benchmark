@@ -20,3 +20,13 @@ repository works around them in `wimpbench/`.
    scientific name; they currently count as `blank` predictions. Suggest a separate
    `Animal (unidentified)` prediction label so detector recall and classifier
    abstention can be told apart.
+4. **(WIMP, not Colin's workflow) Export MegaDetector boxes and scores.** The Camtrap DP
+   export with `includeBoundingBoxes` only has media-level rows for boxes stored with
+   observations (3,901 of 255,227 images on the TEST AWT source, nearly all from the
+   validator, scores mostly 1.0). MegaDetector's per-image detections and confidences
+   are not exported, and no API endpoint returns them, so a test set cannot pick each
+   sequence's best image by detector score (see `docs/02b_select_by_image.Rmd`). Suggest
+   exporting machine detections as media-level observations (`classificationMethod =
+   machine`, `classifiedBy = MegaDetector ...`, `classificationProbability` = score).
+   Creating an export also needs the Maintainer role, and a lower role gets 401 rather
+   than 403.

@@ -1,0 +1,100 @@
+---
+title: "Step 2b. Select one image per sequence (by-image test set)"
+output: html_document
+---
+
+## Purpose
+
+Build the image-level ("by image") version of the `awt_2026_11` test set: the same
+2,905 validated sequences, one image each. The by-sequence set scores a sequence on
+up to two random images, so a sequence whose animal is only in frame for one image
+can be scored on an empty frame. Picking one image per sequence gives a set where
+every image is scored on its own.
+
+## Inputs
+
+- `config/awt_2026_11_by_image.yaml` (test set `awt_2026_11_by_image`).
+- `config/awt_2026_11_by_image_sequences.csv`: class, tag, source env and sequence ID
+  for every sequence (no camera names or timestamps).
+- The source projects' realtime `media.csv`, `observations.csv` and
+  `deployments.csv` (GET only, cached in `state/<set>/sources/`).
+- A Camtrap DP export **with bounding boxes** of each source project, for per-image
+  detector scores (`state/<set>/source_exports/`).
+
+## Code
+
+```{python eval=FALSE}
+import subprocess
+cfg = "config/awt_2026_11_by_image.yaml"
+# Reuses a bounding-box export if one exists (e.g. made in the WIMP web UI); otherwise
+# creates ONE (POST /projects/{id}/exports {"includeBoundingBoxes": true}), records its
+# id in state/ so it is never created twice, polls until Completed and unzips it.
+# Sources with `bbox_export: false` in the config are skipped.
+subprocess.run(["python", "-m", "wimpbench", "source-export", "--config", cfg], check=True)
+subprocess.run(["python", "-m", "wimpbench", "select-by-image", "--config", cfg], check=True)
+```
+
+Rule per sequence (images ordered by timestamp, then file name):
+
+| Class | Pick | `pick_rule` |
+|---|---|---|
+| Animal classes | highest score of an `animal` media-level box | `max_animal_score` |
+| Human | highest score of a `human` box | `max_human_score` |
+| Vehicle | highest score of a `vehicle` box | `max_vehicle_score` |
+| Blank | middle image, `(n - 1) // 2` | `middle` |
+| No scored box of the right type in the sequence | middle image | `fallback_middle` |
+| Source project has no bounding-box export | middle image | `middle_no_source_scores` |
+
+Ties go to the earliest image.
+
+## Where the detector score was found
+
+In the bounding-box export, `observations.csv` holds media-level rows
+(`observationLevel = media`) with `mediaID`, `observationType`, `bboxX/Y/Width/Height`
+and `classificationProbability`. That column is the only per-image score, and it is
+what we used. It is **not** a MegaDetector score for most images:
+
+- The TEST source export has 4,115 media-level rows on 3,901 images out of 255,227,
+  covering 1,039 sequences. MegaDetector's own detections are not exported. Only
+  boxes stored with media-level observations are, and almost all of those are
+  attributed to the human validator (`classificationMethod = human` or the
+  validator in `classifiedBy`). 24 rows are from the Wet Tropics model.
+- Scores are 0.60 to 1.00, with median and quartiles all 1.00, so they barely rank
+  images.
+- No other column or endpoint carries per-image detector scores. Event-level rows
+  have `classificationProbability` but no box. The API (`/docs`) has no media-level
+  detection endpoint, and `GET /sequences/{id}/observations` is event-level.
+- The PROD source export could not be made: the account is Project coordinator, not
+  Maintainer, on that project (POST returned 401). Its 962 sequences (881 non-blank)
+  use the middle image.
+
+## Output
+
+`results/awt_2026_11_by_image/selection_summary.csv` (3 November 2026):
+
+- 2,905 images, one per sequence.
+- Picked by score: 23 (19 animal: 7 Felis catus, 5 Megapodius reinwardt, 4 Muridae,
+  and 1 each of Alectura lathami, Perameles nasuta and Sus scrofa; plus 1 human and
+  3 vehicle).
+- Blank (middle image by rule): 244 (81 of them from PROD).
+- Middle image because the sequence has no scored box (TEST source): 1,757.
+- Middle image because the PROD source has no bounding-box export: 881 non-blank
+  sequences.
+
+So in practice this is a **middle-image** test set, not a best-image one. Detector
+recall on it is not an upper bound. It sits between the by-sequence figure and what
+a best-image pick would give.
+
+`results/<set>/manifest.csv` (public): class, tag, in_model, file name.
+`state/<set>/manifest_full.csv` (private, git-ignored): by-sequence columns plus
+`pick_score`, `pick_rule` and `sequence_images`.
+
+## Known issues
+
+- The Camtrap DP export does not include MegaDetector boxes. A true best-image pick
+  needs WIMP to export machine detections with their confidence (see
+  `docs/upstream_suggestions.md`).
+- Creating an export needs the Maintainer role on the project. An API key with a
+  lower role gets 401, not 403.
+- The middle image of a sequence where the animal crosses quickly can be empty, so
+  some animal "misses" are frames with no animal in them.

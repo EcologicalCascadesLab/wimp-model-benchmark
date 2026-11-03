@@ -9,6 +9,9 @@ sources:
 - env: prod
   project_name: Wet Tropics Camera Trapping 2025 Skye Cassowary Production Environment
   project_id: b8b6ef55-ebe7-47f7-9034-b977399b77a2
+  # No bounding-box export: the account is Project coordinator, not Maintainer, on this
+  # project. Its sequences use the middle image (pick_rule middle_no_source_scores).
+  bbox_export: false
 - env: test
   project_name: Wet Tropics Camera Trapping 2025 Skye Cassowary
   project_id: c31c2bf4-d660-44f8-bf4c-991a94e8f191

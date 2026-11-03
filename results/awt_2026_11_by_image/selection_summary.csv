@@ -1,0 +1,20 @@
+class,sequences,picked_by_score,middle_blank,fallback_no_scored_box,fallback_no_source_scores,sequence_not_found
+Blank,244,0,244,0,0,0
+Human,214,1,0,136,77,0
+Vehicle,213,3,0,119,91,0
+Alectura lathami,199,1,0,147,51,0
+Bos taurus,57,0,0,46,11,0
+Canis lupus familiaris,40,0,0,18,22,0
+Canis lupus dingo,212,0,0,132,80,0
+Casuarius casuarius,190,0,0,153,37,0
+Felis catus,69,7,0,52,10,0
+Heteromyias cinereifrons,54,0,0,41,13,0
+Hypsiprymnodon moschatus,184,0,0,109,75,0
+Megapodius reinwardt,213,5,0,133,75,0
+Orthonyx spaldingii,40,0,0,21,19,0
+Perameles nasuta,195,1,0,141,53,0
+Sus scrofa,195,1,0,162,32,0
+Thylogale stigmatica,189,0,0,119,70,0
+Uromys caudimaculatus,190,0,0,119,71,0
+Wallabia bicolor,13,0,0,4,9,0
+Muridae,194,4,0,105,85,0
