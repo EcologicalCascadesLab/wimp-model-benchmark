@@ -1,0 +1,23 @@
+---
+title: "Step 7. The comparison dashboard"
+output: html_document
+---
+
+`evaluate` writes `results/<set>/dashboard.html`: one self-contained page (no scripts
+or external files) comparing every run of a test set.
+
+1. **Detector table:** recall and precision for animal / human / vehicle / blank per
+   run, and the share of images left with no AI result.
+2. **Species table:** F1, recall and precision per class at each run's best confidence
+   threshold (from Colin's evaluation). Classes outside the model are marked *.
+3. **Links** to Colin's per-run reports, misclassified-image CSVs and comparison report.
+
+Cells are shaded from red (0) to green (1). The same numbers are in
+`detector_metrics.csv`, `species_metrics.csv` (every threshold) and
+`species_metrics_best_threshold.csv` for use in R or Python.
+
+```{python eval=FALSE}
+import subprocess, webbrowser, pathlib
+subprocess.run(["python", "-m", "wimpbench", "evaluate", "--config", "config/awt_2026_11.yaml"], check=True)
+webbrowser.open(pathlib.Path("results/awt_2026_11/dashboard.html").resolve().as_uri())
+```

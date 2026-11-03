@@ -51,7 +51,19 @@ The validated images come from Skye Anderson's AWT camera-trap projects (UQ), wh
 | `test_awt_md075` | TEST | Wet Tropics | 0.75 |
 | `prod_md_v6` | PROD | none (MegaDetector V6 only) | production default |
 
-The detector confidence threshold became a project setting on TEST on 27 October 2026 (QCIF pipeline changes by Renuka Sharma). Results go in `results/awt_2026_11/` as they are produced.
+The detector confidence threshold became a project setting on TEST on 27 October 2026 (QCIF pipeline changes by Renuka Sharma).
+
+### Results (3 Nov 2026; 4,399 images, 19 classes)
+
+| Run | Animal recall | Blank recall | Human precision | No AI result | Median species F1* |
+|-----|--------------:|-------------:|----------------:|-------------:|-------------------:|
+| PROD, Wet Tropics, MD default | 0.77 | 0.34 | 0.34 | 6.5% | 0.65 |
+| TEST, Wet Tropics, MD 0.25 | 0.92 | 0.09 | 0.80 | 0.0% | 0.54 |
+| TEST, Wet Tropics, MD 0.50 | 0.82 | 0.50 | 0.82 | 0.1% | 0.65 |
+| TEST, Wet Tropics, MD 0.75 | 0.68 | 0.79 | 0.83 | 0.0% | 0.64 |
+| PROD, MegaDetector V6 only | 0.00 | 0.34 | 0.84 | 84.6% | n/a |
+
+*Median F1 at each run's best confidence threshold over the 14 animal classes the model has. Findings and caveats: [`results/awt_2026_11/README.md`](results/awt_2026_11/README.md); all numbers: `results/awt_2026_11/dashboard.html`.
 
 ## Repository layout
 

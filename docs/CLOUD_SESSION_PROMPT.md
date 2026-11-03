@@ -11,7 +11,7 @@
 
 ## Prompt to paste
 
-> Continue the WIMP model benchmark for `config/awt_2026_11.yaml` following
+> Continue (or rerun) the WIMP model benchmark for a config in `config/` following
 > CLAUDE.md. Run `python -m wimpbench status`; if any deployment is not
 > `AIAnnotationCompleted`, report the table and stop. Otherwise run `export` and
 > `evaluate`, check the reports open and the numbers are sensible (images per run
