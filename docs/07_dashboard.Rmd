@@ -21,3 +21,21 @@ import subprocess, webbrowser, pathlib
 subprocess.run(["python", "-m", "wimpbench", "evaluate", "--config", "config/awt_2026_11.yaml"], check=True)
 webbrowser.open(pathlib.Path("results/awt_2026_11/dashboard.html").resolve().as_uri())
 ```
+
+## Comparing two test sets
+
+`python -m wimpbench.compare <set A folder> <set B folder>` writes
+`<set B>/comparison.csv`, with one row per run and set: animal, blank, human and
+vehicle recall and precision, the unclassified share, and the median species F1 at
+the best threshold over the animal classes the model has. Used for the by-sequence vs
+by-image comparison in `results/awt_2026_11_by_image/README.md`.
+
+```{python eval=FALSE}
+import subprocess
+subprocess.run(["python", "-m", "wimpbench.compare", "results/awt_2026_11",
+                "results/awt_2026_11_by_image"], check=True)
+```
+
+Blank precision depends on the ratio of animal to blank images, so it is only
+comparable between sets with the same class mix.
+

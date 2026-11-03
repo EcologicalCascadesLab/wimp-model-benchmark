@@ -55,7 +55,9 @@ The validated images come from Skye Anderson's AWT camera-trap projects (UQ), wh
 
 The detector confidence threshold became a project setting on TEST on 27 October 2026 (QCIF pipeline changes by Renuka Sharma).
 
-### Results (3 Nov 2026; 4,399 images, 19 classes)
+### Results (3 Nov 2026, Australian Wet Tropics, 19 classes)
+
+**By sequence** (4,399 images, up to 2 per validated sequence):
 
 | Run | Animal recall | Blank recall | Human precision | No AI result | Median species F1* |
 |-----|--------------:|-------------:|----------------:|-------------:|-------------------:|
@@ -65,7 +67,17 @@ The detector confidence threshold became a project setting on TEST on 27 October
 | TEST, Wet Tropics, MD 0.75 | 0.68 | 0.79 | 0.83 | 0.0% | 0.64 |
 | PROD, MegaDetector V6 only | 0.00 | 0.34 | 0.84 | 84.6% | n/a |
 
-*Median F1 at each run's best confidence threshold over the 14 animal classes the model has. Findings and caveats: [`results/awt_2026_11/README.md`](results/awt_2026_11/README.md); all numbers: `results/awt_2026_11/dashboard.html`.
+**By image** (same 2,905 sequences, one image each, mostly the middle image; 3 Nov 2026):
+
+| Run | Animal recall | Blank recall | Human precision | No AI result | Median species F1* |
+|-----|--------------:|-------------:|----------------:|-------------:|-------------------:|
+| PROD, Wet Tropics, MD default | 0.80 | 0.39 | 0.42 | 5.9% | 0.69 |
+| TEST, Wet Tropics, MD 0.25 | 0.94 | 0.08 | 0.79 | 0.0% | 0.59 |
+| TEST, Wet Tropics, MD 0.50 | 0.85 | 0.50 | 0.80 | 0.1% | 0.69 |
+| TEST, Wet Tropics, MD 0.75 | 0.73 | 0.77 | 0.81 | 0.0% | 0.67 |
+| PROD, MegaDetector V6 only | 0.00 | 0.39 | 0.80 | 82.9% | n/a |
+
+*Median F1 at each run's best confidence threshold over the 14 animal classes the model has. Findings and caveats: [`results/awt_2026_11/README.md`](results/awt_2026_11/README.md) (by sequence) and [`results/awt_2026_11_by_image/README.md`](results/awt_2026_11_by_image/README.md) (by image, with the comparison); all numbers: each set's `dashboard.html`.
 
 ## Repository layout
 
@@ -93,6 +105,7 @@ export WIMP_PROD_KEY=pk_...   # WIMP > User settings > API keys
 export WIMP_TEST_KEY=pk_...
 python -m wimpbench check   --config config/awt_2026_11.yaml
 python -m wimpbench select  --config config/awt_2026_11.yaml   # build the validated-image manifest
+# by-image set instead: source-export, then select-by-image (docs/02b_select_by_image.Rmd)
 python -m wimpbench fetch   --config config/awt_2026_11.yaml   # download the test images
 python -m wimpbench upload  --config config/awt_2026_11.yaml   # deployments + upload + AI
 python -m wimpbench status  --config config/awt_2026_11.yaml
