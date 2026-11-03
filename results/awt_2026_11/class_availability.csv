@@ -1,0 +1,72 @@
+label,images,sequences,cameras
+blank,136575,27354,193
+vehicle,14513,2547,49
+Homo sapiens,9290,1524,130
+Sus scrofa,5324,583,104
+Megapodius reinwardt,4067,599,87
+Alectura lathami,3122,582,79
+Thylogale stigmatica,2753,246,47
+Casuarius casuarius,2203,376,69
+Mammalia,2139,577,65
+Canis lupus dingo,2091,521,85
+Perameles nasuta,1892,398,70
+Muridae,1754,439,44
+Uromys caudimaculatus,1613,393,63
+Hypsiprymnodon moschatus,1601,361,50
+Bos taurus,504,57,15
+Pitta versicolor,276,61,17
+Felis catus,264,69,24
+Canis lupus familiaris,231,40,17
+Animalia,225,72,34
+Burhinus grallarius,213,49,4
+Aves,207,52,24
+Heteromyias cinereifrons,193,54,17
+Orthonyx spaldingii,190,40,17
+Chalcophaps longirostris,181,50,11
+Rallina tricolor,100,30,10
+Tachyglossus aculeatus,98,28,19
+Dendrolagus lumholtzi,75,13,6
+Ailuroedus maculosus,75,11,8
+Varanus varius,69,17,12
+Wallabia bicolor,60,13,5
+Varanus,51,16,8
+Equus caballus,45,4,1
+Orthonyx temminckii,42,9,6
+Melloria quoyi,42,8,5
+Psophodes olivaceus,37,10,7
+Rodentia,33,11,6
+Hydromys chrysogaster,33,9,7
+Ailuroedus melanotis,27,5,4
+Varanus scalaris,24,7,4
+Dendrolagus bennettianus,21,6,3
+Rhipidura rufifrons,18,3,3
+Ailuroedus crassirostris,18,4,3
+Sus scrofa scrofa,15,2,1
+Intellagama lesueurii,12,4,1
+Insecta,9,3,2
+Dactylopsila trivirgata,9,3,3
+Dendrolagus,9,1,1
+Cracticus torquatus,9,1,1
+Antechinus,6,2,2
+Equus asinus,6,1,1
+Cracticus nigrogularis,6,1,1
+Scincidae,6,2,1
+Macropodidae,6,2,2
+Tregellasia capito,6,1,1
+Acrobates pygmaeus,3,1,1
+Lepidoptera,3,1,1
+Felis,3,1,1
+Eopsaltria australis,3,1,1
+Cacatua galerita,3,1,1
+Canis familiaris,3,1,1
+Chalcophaps indica,3,1,1
+Centropus phasianinus,3,1,1
+Dasyurus maculatus,3,1,1
+Reptilia,3,1,1
+Podargus strigoides,3,1,1
+Meliphaga lewinii,3,2,1
+Passeriformes,3,1,1
+Thylogale,3,1,1
+Sorex araneus,3,1,1
+Squamata,3,1,1
+Wallabia,3,1,1

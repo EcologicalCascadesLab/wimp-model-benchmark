@@ -23,9 +23,29 @@ sampling:
   max_per_sequence: 2        # spread the sample across sequences
   max_share_per_camera: 0.2  # no camera supplies more than 20% of a class
   seed: 20261103
-  # class name in the test set -> scientific name(s) as stored on WIMP.
-  # Filled from the AWT model label list and Skye's species counts by `select`.
-  classes: {}
+  # class in the test set -> how it is tagged on WIMP (the true label) and which
+  # validated source labels feed it. in_model: whether the Wet Tropics model has a
+  # matching class (judged from the labels the model itself writes on TEST).
+  classes:
+    Blank:                    {tag: blank, source_labels: [blank]}
+    Human:                    {tag: Homo sapiens, source_labels: [Homo sapiens]}
+    Vehicle:                  {tag: vehicle, source_labels: [vehicle]}
+    Alectura lathami:         {tag: Alectura lathami, source_labels: [Alectura lathami]}
+    Bos taurus:               {tag: Bos taurus, source_labels: [Bos taurus]}
+    Canis lupus familiaris:   {tag: Canis lupus familiaris, source_labels: [Canis lupus familiaris]}
+    Canis lupus dingo:        {tag: Canis lupus dingo, source_labels: [Canis lupus dingo], in_model: false}
+    Casuarius casuarius:      {tag: Casuarius casuarius, source_labels: [Casuarius casuarius]}
+    Felis catus:              {tag: Felis catus, source_labels: [Felis catus]}
+    Heteromyias cinereifrons: {tag: Heteromyias cinereifrons, source_labels: [Heteromyias cinereifrons]}
+    Hypsiprymnodon moschatus: {tag: Hypsiprymnodon moschatus, source_labels: [Hypsiprymnodon moschatus]}
+    Megapodius reinwardt:     {tag: Megapodius reinwardt, source_labels: [Megapodius reinwardt]}
+    Orthonyx spaldingii:      {tag: Orthonyx spaldingii, source_labels: [Orthonyx spaldingii]}
+    Perameles nasuta:         {tag: Perameles nasuta, source_labels: [Perameles nasuta]}
+    Sus scrofa:               {tag: Sus scrofa, source_labels: [Sus scrofa]}
+    Thylogale stigmatica:     {tag: Thylogale stigmatica, source_labels: [Thylogale stigmatica]}
+    Uromys caudimaculatus:    {tag: Uromys caudimaculatus, source_labels: [Uromys caudimaculatus]}
+    Wallabia bicolor:         {tag: Wallabia bicolor, source_labels: [Wallabia bicolor]}
+    Muridae:                  {tag: Muridae, source_labels: [Muridae], in_model: false}
 
 # One benchmark project per model run. Projects are created in the WIMP UI
 # (docs/03_wimp_projects.Rmd); paste each project_id here afterwards.

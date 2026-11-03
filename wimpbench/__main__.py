@@ -29,6 +29,8 @@ def main(argv=None):
     p.add_argument("step", choices=["check", "select", "fetch", "upload", "status", "export", "evaluate"])
     p.add_argument("--config", required=True)
     p.add_argument("--only", help="comma-separated run ids")
+    p.add_argument("--classes", help="comma-separated classes (upload/fetch)")
+    p.add_argument("--max-seconds", type=int, help="stop cleanly after this long (exit 75 = run again)")
     a = p.parse_args(argv)
     cfg = load_cfg(a.config)
     res = ROOT / "results" / cfg["test_set"]
@@ -57,15 +59,16 @@ def main(argv=None):
 
     elif a.step == "fetch":
         from .select_images import fetch
-        fetch(cfg, ROOT)
+        fetch(cfg, ROOT, a.classes.split(",") if a.classes else None)
 
     elif a.step == "upload":
-        from .upload import upload_run
+        from .upload import transfer
         manifest = pd.read_csv(res / "manifest.csv", dtype=str)
-        manifest = manifest[manifest["local_file"].notna()]
-        for r in runs_selected(cfg, a.only):
-            print(f"== {r['id']}")
-            upload_run(cfg, r, manifest, ROOT)
+        if a.classes:
+            manifest = manifest[manifest["class"].isin(a.classes.split(","))]
+        done = transfer(cfg, manifest, ROOT, runs_selected(cfg, a.only), a.max_seconds)
+        print("ALL FINALIZED" if done else "not finished: run upload again")
+        return 0 if done else 75
 
     elif a.step == "status":
         from .upload import status_run
