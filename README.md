@@ -41,7 +41,7 @@ The WIMP API covers every step except project creation and project settings (AI 
 
 ## First test set: Australian Wet Tropics (AWT), November 2026
 
-The validated images come from Skye Anderson's AWT camera-trap projects (UQ), which are fully human-sorted on WIMP. Four model runs:
+The validated images come from Skye Anderson's AWT camera-trap projects (UQ), which are fully human-sorted on WIMP. Five model runs (all projects: sequence cut-off 0 s, AI sharing Private so the test images never enter model training):
 
 | Run | Environment | Classifier | MegaDetector threshold |
 |-----|-------------|------------|------------------------|
@@ -49,6 +49,7 @@ The validated images come from Skye Anderson's AWT camera-trap projects (UQ), wh
 | `test_awt_md025` | TEST | Wet Tropics | 0.25 |
 | `test_awt_md050` | TEST | Wet Tropics | 0.50 |
 | `test_awt_md075` | TEST | Wet Tropics | 0.75 |
+| `prod_md_v6` | PROD | none (MegaDetector V6 only) | production default |
 
 The detector confidence threshold became a project setting on TEST on 27 October 2026 (QCIF pipeline changes by Renuka Sharma). Results go in `results/awt_2026_11/` as they are produced.
 

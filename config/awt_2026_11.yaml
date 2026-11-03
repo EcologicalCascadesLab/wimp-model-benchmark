@@ -8,14 +8,15 @@ data_collation_process: >
   Images drawn from sequences that a person validated on WIMP, sampled across
   cameras and sequences (at most `max_per_sequence` images from any one sequence).
 
-# Where the validated images come from (read-only). Project IDs are filled in by `select`.
+# Where the validated images come from (read-only: GET requests only).
 sources:
   - env: prod
-    project_name_contains: "Skye"
-    project_id: ""
+    project_name: "Wet Tropics Camera Trapping 2025 Skye Cassowary Production Environment"
+    project_id: "b8b6ef55-ebe7-47f7-9034-b977399b77a2"
   - env: test
-    project_name_contains: "Skye"
-    project_id: ""
+    project_name: "Wet Tropics Camera Trapping 2025 Skye Cassowary"
+    project_id: "c31c2bf4-d660-44f8-bf4c-991a94e8f191"
+  # candidate, check before use: "Luskin WildObs QLD AWT private properties UQ ECL" (prod, 8b3ccc87-5e16-4d9b-95fc-88334b8d950d)
 
 sampling:
   per_class: 250
@@ -28,33 +29,43 @@ sampling:
 
 # One benchmark project per model run. Projects are created in the WIMP UI
 # (docs/03_wimp_projects.Rmd); paste each project_id here afterwards.
-project_settings:
+project_settings:            # set in the WIMP UI on 3 Nov 2026
   sequence_cutoff_seconds: 0
+  ai_model: WildObs_QLD WetTropics
+  organisation: University of Queensland (UQ)
+  ai_sharing: Private          # benchmark images must never enter model training
 runs:
   - id: prod_awt_default
     env: prod
     project_name: "Model benchmark testing: Wet Tropics (PROD default)"
     classifier: Wet Tropics
     detector_threshold: default
-    project_id: ""
+    project_id: "efbbf6a5-c02c-4e32-aa53-431b25c77de4"
   - id: test_awt_md025
     env: test
     project_name: "Model benchmark testing: Wet Tropics, MegaDetector 0.25"
     classifier: Wet Tropics
     detector_threshold: 0.25
-    project_id: ""
+    project_id: "d39a5b2e-634b-47c5-a8ac-18f94e28452f"
   - id: test_awt_md050
     env: test
     project_name: "Model benchmark testing: Wet Tropics, MegaDetector 0.50"
     classifier: Wet Tropics
     detector_threshold: 0.50
-    project_id: ""
+    project_id: "792b86de-07f3-4e8f-9944-cbcff705202c"
   - id: test_awt_md075
     env: test
     project_name: "Model benchmark testing: Wet Tropics, MegaDetector 0.75"
     classifier: Wet Tropics
     detector_threshold: 0.75
-    project_id: ""
+    project_id: "007ab270-90b9-4ce8-8366-d3f151c6e260"
+
+  - id: prod_md_v6
+    env: prod
+    project_name: "Model benchmark testing: MegaDetector V6 only (PROD default)"
+    classifier: Megadetector V6 (no species classifier)
+    detector_threshold: default
+    project_id: "c7f0dcd4-7006-45c5-a328-85ff42831e5d"
 
 evaluation:
   thresholds: [0.5, 0.6, 0.7, 0.8, 0.9]
