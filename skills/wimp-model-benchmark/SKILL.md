@@ -56,7 +56,7 @@ them if so.
    Colin's HTML reports and comparison report, detector metrics, species metrics,
    `dashboard.html`.
 7. **Report.** Commit results (never images, exports, keys, personal names, camera names,
-   timestamps or media links) and push. Tick *Restricted images* on every benchmark project. Tell the user
+   timestamps or media links) and push. Check *Restricted images* is ticked on every benchmark project (WIMP default). Tell the user
    the headline per model in plain words, link the dashboard, and list caveats (small
    classes, classes outside the model).
 
