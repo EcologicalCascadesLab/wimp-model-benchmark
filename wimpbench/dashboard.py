@@ -10,7 +10,7 @@ import pandas as pd
 def _species_table(colin):
     rows = []
     for r in colin.runs:
-        best = r.metrics.best.copy()
+        best = r.metrics.best_thresholds.copy()
         best.insert(0, "run", r.model_name)
         rows.append(best)
     return pd.concat(rows) if rows else pd.DataFrame()

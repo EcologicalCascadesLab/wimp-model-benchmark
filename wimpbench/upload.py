@@ -23,7 +23,7 @@ from pathlib import Path
 from .api import Api
 
 BATCH = 10
-WORKERS = 6
+WORKERS = 12
 DEPLOY_START = "2015-01-01T00:00:00.000Z"
 DEPLOY_END = "2026-12-31T23:59:59.000Z"
 _lock = threading.Lock()

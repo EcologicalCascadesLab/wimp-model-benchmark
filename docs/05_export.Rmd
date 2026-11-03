@@ -1,0 +1,28 @@
+---
+title: "Step 5. Export each run as Camtrap DP"
+output: html_document
+---
+
+## Purpose
+
+Collect each benchmark project's AI results in the layout Colin's workflow reads:
+`Input_Data/<test_set>/<run_id>/{deployments,media,observations}.csv`.
+
+## When
+
+After `status` shows every deployment of every run with AI done
+(`AIAnnotationCompleted`). Exporting earlier scores unfinished sequences as blank.
+
+```{python eval=FALSE}
+import subprocess
+subprocess.run(["python", "-m", "wimpbench", "status", "--config", "config/awt_2026_11.yaml"])
+subprocess.run(["python", "-m", "wimpbench", "export", "--config", "config/awt_2026_11.yaml"], check=True)
+```
+
+## What the step does
+
+Downloads the realtime CSV projections (`GET /projects/{id}/{table}.csv`; no export
+job needed), keeps an untouched copy in `state/`, and appends the run label to
+`classifiedBy` (e.g. `WildObs_QLD WetTropics | MD 0.25 (TEST)`) so Colin's reports
+can tell runs of the same model apart (see `upstream_suggestions.md`, item 2). It
+warns if `media.csv` lacks the `sequenceID` that event-level scoring needs.

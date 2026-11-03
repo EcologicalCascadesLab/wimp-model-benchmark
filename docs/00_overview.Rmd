@@ -1,0 +1,47 @@
+---
+title: "WIMP model benchmark: overview"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+library(reticulate)
+knitr::opts_knit$set(root.dir = here::here())
+```
+
+## The question
+
+How well do the computer-vision models on the WildObs Image Management Platform
+(WIMP) perform on real camera-trap images? A WIMP AI result has two stages:
+MegaDetector decides whether an image holds an animal, a person, a vehicle or
+nothing, and a regional species classifier names the animal. Errors at either
+stage reach users, so the benchmark scores both.
+
+## The method
+
+Colin Broughton's benchmark workflow (WildObs, 2026) scores a model by running
+images whose true label is known through the WIMP and comparing the AI output with
+the truth. Each test class gets its own deployment, tagged with the true label, in
+a project configured with the model under test. This repository automates every
+step around Colin's evaluation so that any WildObs user can run it from four inputs.
+
+| Step | File | What happens | Where |
+|---|---|---|---|
+| 1 | `01_inputs.Rmd` | The four inputs | user |
+| 2 | `02_select_images.Rmd` | Pick validated images from existing WIMP projects | API, read-only |
+| 3 | `03_wimp_projects.Rmd` | One benchmark project per model run | WIMP web UI |
+| 4 | `04_upload_and_ai.Rmd` | Deployments, upload, AI | API |
+| 5 | `05_export.Rmd` | Camtrap DP tables per run | API |
+| 6 | `06_evaluate.Rmd` | Colin's reports + detector metrics | local |
+| 7 | `07_dashboard.Rmd` | Comparison across runs | local |
+
+## Running a step
+
+Every step is one command. In R Markdown the chunks call the same Python module.
+
+```{python eval=FALSE}
+import subprocess
+subprocess.run(["python", "-m", "wimpbench", "check", "--config", "config/awt_2026_11.yaml"], check=True)
+```
+
+These files convert to Jupyter notebooks one-to-one (each `python` chunk becomes a
+code cell, the text a markdown cell), e.g. with `jupytext --to ipynb docs/*.Rmd`.

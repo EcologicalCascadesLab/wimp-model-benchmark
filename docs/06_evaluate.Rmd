@@ -1,0 +1,36 @@
+---
+title: "Step 6. Evaluate: Colin's reports plus detector metrics"
+output: html_document
+---
+
+## Purpose
+
+Score every run against the true labels.
+
+```{python eval=FALSE}
+import subprocess
+subprocess.run(["python", "-m", "wimpbench", "evaluate", "--config", "config/awt_2026_11.yaml"], check=True)
+```
+
+## Two levels of scoring
+
+**Species level (Colin's workflow, unchanged).** For each class and confidence
+threshold (0.5 to 0.9): recall, precision and F1, confusion matrices, the best
+threshold per class, animal recall split into detector and classifier stages, a
+misclassified-images CSV, and a comparison report across runs. Output in
+`results/<set>/colin_reports/`.
+
+**Detector level (added here).** True and predicted labels collapsed to
+animal / human / vehicle / blank (+ unclassified), using `observationType` so
+vehicle and blank results are read correctly. Recall, precision and F1 per class,
+the confusion matrix per run, and the share of images left with no AI result.
+Output: `results/<set>/detector_metrics.csv` and `detector_confusion_<run>.csv`.
+
+## Reading the AWT design
+
+- The three TEST runs differ only in the MegaDetector confidence threshold
+  (0.25 / 0.50 / 0.75), so differences between them isolate the threshold.
+- `prod_awt_default` vs `test_awt_md050` compares PROD's pipeline with TEST's
+  October 2026 pipeline at the same threshold.
+- `prod_md_v6` (MegaDetector alone) vs `prod_awt_default` shows whether adding
+  the classifier changes what is detected.

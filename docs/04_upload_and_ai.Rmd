@@ -1,0 +1,47 @@
+---
+title: "Step 4. Upload the test set and run the AI"
+output: html_document
+---
+
+## Purpose
+
+Put the same images into every benchmark project, one deployment per class, and
+start the AI.
+
+## What the step does
+
+For each run project in the config:
+
+1. Checks the project name matches the config (never writes to any other project).
+2. Creates a location and a camera called `benchmark`, resolves one tag per class
+   (`tags/resolve`), and creates one deployment per class carrying that tag. Dates
+   span 2015 to 2026 so every image timestamp falls inside the deployment.
+3. Streams the images: each batch of 10 is downloaded from its source project,
+   uploaded to every run that still needs it, then deleted. Peak disk use stays
+   at a few hundred MB.
+4. When a class is complete in a run, sets `automaticAi: true` and calls
+   `finalizeUpload`; WIMP creates sequences and queues the AI.
+
+```{python eval=FALSE}
+import subprocess
+# time-boxed and resumable: exit code 75 means "run again"
+subprocess.run(["python", "-m", "wimpbench", "upload", "--config", "config/awt_2026_11.yaml",
+                "--max-seconds", "900"])
+subprocess.run(["python", "-m", "wimpbench", "status", "--config", "config/awt_2026_11.yaml"])
+```
+
+## Timing (AWT, 3 Nov 2026)
+
+4,399 images x 5 projects = 22,000 uploads. From the cloud workspace this ran at
+roughly 40 source images a minute with 6 parallel batches (each image goes to five
+projects). A pilot class (Wallabia bicolor, 60 images) reached AI processing in
+all five projects within a minute of finalizing.
+
+## Known issues
+
+- With a 0-second sequence cut-off, images with identical timestamps (camera
+  bursts within one second) still form one sequence: 60 pilot images made 58
+  sequences. Event-level scoring gives such images the same prediction, which is
+  what a WIMP user sees.
+- The API cannot delete deployments. A failed class is re-uploaded into its
+  existing deployment (the state file records each file per run).

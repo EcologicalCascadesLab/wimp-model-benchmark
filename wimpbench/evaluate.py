@@ -26,7 +26,7 @@ def _colin():
 
 
 def evaluate(cfg, root):
-    root = Path(root)
+    root = Path(root).resolve()
     ts = cfg["test_set"]
     res = root / "results" / ts
     res.mkdir(parents=True, exist_ok=True)

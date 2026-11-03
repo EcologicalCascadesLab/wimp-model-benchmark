@@ -1,0 +1,20 @@
+---
+title: "Step 1. The four inputs"
+output: html_document
+---
+
+A benchmark needs four things from the user. Templates are in `config/inputs_template/`.
+
+1. **Validated images.** Easiest: name the WIMP project(s) where people have
+   already sorted the images; step 2 finds and samples them. Otherwise a folder with
+   one subfolder per class.
+2. **Benchmark project metadata** (`benchmark_projects.csv`): one row per model run.
+3. **Image spreadsheet** (`validated_images.csv`): one row per image with its true
+   class. Step 2 writes this automatically when images come from WIMP.
+4. **Models to test** (`models.yaml`): classifier and detector threshold per run.
+
+All four are combined in one run file, e.g. `config/awt_2026_11.yaml`.
+
+Choosing classes (from Colin's guidance): 100+ images per class where possible,
+blanks and common non-target species included (they drive precision), and no images
+that were used to train the models being tested.

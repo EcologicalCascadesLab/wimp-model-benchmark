@@ -1,0 +1,81 @@
+---
+title: "Step 2. Select validated images from WIMP"
+output: html_document
+---
+
+## Purpose
+
+Build a test set of images whose true class a person has confirmed, without
+copying anything by hand. The images already sit on WIMP in the source projects;
+`select` finds them through the API (read-only) and writes a manifest.
+
+## What counts as validated
+
+The Camtrap DP export has no per-sequence validation flag. A sequence is treated
+as validated when either
+
+- its deployment is fully reviewed (`percentInspected >= 99.9` in
+  `GET /projects/{id}/deployments/{id}/status`), or
+- its observation was made by a person (`classificationMethod = human`).
+
+Sequences with more than one label (two species, or an animal and a person) are
+dropped so every image has exactly one true class. Unclassified and
+"Animal, unidentified" sequences are dropped.
+
+## Sampling
+
+Up to 250 images per class, round-robin across cameras and then sequences, at most
+2 images per sequence while other sequences remain, and no camera supplying more
+than 20% of a class unless the class has too few cameras. The seed is fixed in the
+config, so the same inputs give the same manifest.
+
+```{python eval=FALSE}
+import subprocess
+subprocess.run(["python", "-m", "wimpbench", "select", "--config", "config/awt_2026_11.yaml"], check=True)
+```
+
+## Output: AWT test set (3 November 2026)
+
+Sources: Skye Anderson's *Wet Tropics Camera Trapping 2025 Skye Cassowary*
+projects on PROD (254 deployments, 26 fully reviewed) and TEST (255 deployments,
+145 fully reviewed). No image appeared in both. None of Skye's images were used to
+train any WildObs model (M. Luskin, 3 Nov 2026).
+
+| Class | Images | Cameras available | In Wet Tropics model |
+|---|---:|---:|---|
+| Blank | 250 | 193 | (detector) |
+| Human | 250 | 130 | yes |
+| Vehicle | 250 | 49 | (detector) |
+| Alectura lathami | 250 | 79 | yes |
+| Bos taurus | 250 | 15 | yes |
+| Canis lupus familiaris | 212 | 17 | yes |
+| Canis lupus dingo | 250 | 85 | no (scored against the model's dog label separately) |
+| Casuarius casuarius | 250 | 69 | yes |
+| Felis catus | 248 | 24 | yes |
+| Heteromyias cinereifrons | 189 | 17 | yes |
+| Hypsiprymnodon moschatus | 250 | 50 | yes |
+| Megapodius reinwardt | 250 | 87 | yes |
+| Orthonyx spaldingii | 190 | 17 | yes |
+| Perameles nasuta | 250 | 70 | yes |
+| Sus scrofa | 250 | 104 | yes |
+| Thylogale stigmatica | 250 | 47 | yes |
+| Uromys caudimaculatus | 250 | 63 | yes |
+| Wallabia bicolor | 60 | 5 | yes (only 60 validated images exist) |
+| Muridae | 250 | 44 | no (common non-target, tests precision) |
+| **Total** | **4,399** | | |
+
+"In model" was judged from the labels the Wet Tropics model writes on TEST; the
+model's own label list should be confirmed with QCIF.
+
+`results/awt_2026_11/manifest.csv` lists every image (file, class, source camera,
+sequence and project). `class_availability.csv` lists every validated label and
+how many images exist, for choosing classes in later test sets.
+
+## Known issues
+
+- Dingo and domestic dog: the source projects separate them; the model appears to
+  have one dog label. The dingo class therefore shows how dingoes are labelled, and
+  a custom match (`Canis lupus dingo` -> `Canis familiaris`) can be applied in
+  Colin's evaluation if they should count as correct.
+- Small classes (Wallabia 60, Heteromyias 189, Orthonyx 190) give wider
+  uncertainty on recall and precision.
