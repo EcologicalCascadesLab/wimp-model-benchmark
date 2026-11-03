@@ -1,0 +1,149 @@
+# Image-level benchmark (one image per sequence). See docs/TASK_by_image.md
+test_set: awt_2026_11_by_image
+description: 'Image-level version of awt_2026_11: the same validated sequences, one image per sequence (the image
+  with the highest MegaDetector score for the sequence class in the source project; middle image for blank sequences).'
+data_source_location: Australian Wet Tropics, Queensland
+data_collation_process: 'One image per validated sequence from the awt_2026_11 test set: highest source MegaDetector
+  detection score for the class (animal, person or vehicle); middle image for blank sequences.'
+sources:
+- env: prod
+  project_name: Wet Tropics Camera Trapping 2025 Skye Cassowary Production Environment
+  project_id: b8b6ef55-ebe7-47f7-9034-b977399b77a2
+- env: test
+  project_name: Wet Tropics Camera Trapping 2025 Skye Cassowary
+  project_id: c31c2bf4-d660-44f8-bf4c-991a94e8f191
+sampling:
+  per_class: 250
+  max_per_sequence: 2
+  max_share_per_camera: 0.2
+  seed: 20261103
+  classes:
+    Blank:
+      tag: blank
+      source_labels:
+      - blank
+    Human:
+      tag: Homo sapiens
+      source_labels:
+      - Homo sapiens
+    Vehicle:
+      tag: vehicle
+      source_labels:
+      - vehicle
+    Alectura lathami:
+      tag: Alectura lathami
+      source_labels:
+      - Alectura lathami
+    Bos taurus:
+      tag: Bos taurus
+      source_labels:
+      - Bos taurus
+    Canis lupus familiaris:
+      tag: Canis lupus familiaris
+      source_labels:
+      - Canis lupus familiaris
+    Canis lupus dingo:
+      tag: Canis lupus dingo
+      source_labels:
+      - Canis lupus dingo
+      in_model: false
+    Casuarius casuarius:
+      tag: Casuarius casuarius
+      source_labels:
+      - Casuarius casuarius
+    Felis catus:
+      tag: Felis catus
+      source_labels:
+      - Felis catus
+    Heteromyias cinereifrons:
+      tag: Heteromyias cinereifrons
+      source_labels:
+      - Heteromyias cinereifrons
+    Hypsiprymnodon moschatus:
+      tag: Hypsiprymnodon moschatus
+      source_labels:
+      - Hypsiprymnodon moschatus
+    Megapodius reinwardt:
+      tag: Megapodius reinwardt
+      source_labels:
+      - Megapodius reinwardt
+    Orthonyx spaldingii:
+      tag: Orthonyx spaldingii
+      source_labels:
+      - Orthonyx spaldingii
+    Perameles nasuta:
+      tag: Perameles nasuta
+      source_labels:
+      - Perameles nasuta
+    Sus scrofa:
+      tag: Sus scrofa
+      source_labels:
+      - Sus scrofa
+    Thylogale stigmatica:
+      tag: Thylogale stigmatica
+      source_labels:
+      - Thylogale stigmatica
+    Uromys caudimaculatus:
+      tag: Uromys caudimaculatus
+      source_labels:
+      - Uromys caudimaculatus
+    Wallabia bicolor:
+      tag: Wallabia bicolor
+      source_labels:
+      - Wallabia bicolor
+    Muridae:
+      tag: Muridae
+      source_labels:
+      - Muridae
+      in_model: false
+project_settings:
+  sequence_cutoff_seconds: 0
+  ai_model: WildObs_QLD WetTropics
+  organisation: University of Queensland (UQ)
+  ai_sharing: Private
+runs:
+- id: prod_awt_default
+  env: prod
+  project_name: 'Model benchmark testing (by image): Wet Tropics (PROD default)'
+  classifier: Wet Tropics
+  detector_threshold: default
+  project_id: 6572be69-de7d-40e9-995d-fa34d1398b66
+- id: test_awt_md025
+  env: test
+  project_name: 'Model benchmark testing (by image): Wet Tropics, MegaDetector 0.25'
+  classifier: Wet Tropics
+  detector_threshold: 0.25
+  project_id: 003a1631-f3c6-46be-9cf7-e40e4fa757a3
+- id: test_awt_md050
+  env: test
+  project_name: 'Model benchmark testing (by image): Wet Tropics, MegaDetector 0.50'
+  classifier: Wet Tropics
+  detector_threshold: 0.5
+  project_id: 5b661d4e-7120-4ee7-b8f4-88aed489cff7
+- id: test_awt_md075
+  env: test
+  project_name: 'Model benchmark testing (by image): Wet Tropics, MegaDetector 0.75'
+  classifier: Wet Tropics
+  detector_threshold: 0.75
+  project_id: dcce6ae0-15d7-47a3-8bc1-9121e1528bf8
+- id: prod_md_v6
+  env: prod
+  project_name: 'Model benchmark testing (by image): MegaDetector V6 only (PROD default)'
+  classifier: Megadetector V6 (no species classifier)
+  detector_threshold: default
+  project_id: 6c2eb0ca-0594-4b03-9a76-988f07f08de3
+evaluation:
+  thresholds:
+  - 0.5
+  - 0.6
+  - 0.7
+  - 0.8
+  - 0.9
+  observation_level: event
+  template: full
+selection:
+  mode: one_per_sequence
+  sequences_from: config/awt_2026_11_by_image_sequences.csv
+  pick: max_md_score
+  blank_pick: middle
+  score_source: Camtrap DP export with bounding boxes of each source project (media-level observations)
