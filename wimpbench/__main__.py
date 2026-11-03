@@ -1,6 +1,6 @@
 """python -m wimpbench <step> --config config/<set>.yaml
 
-Steps: check, select, fetch, upload, status, export, evaluate
+Steps: check, select, source-export, select-by-image, fetch, upload, status, export, evaluate
 """
 import argparse
 import sys
@@ -26,7 +26,7 @@ def runs_selected(cfg, only):
 
 def main(argv=None):
     p = argparse.ArgumentParser(prog="wimpbench")
-    p.add_argument("step", choices=["check", "select", "fetch", "upload", "status", "export", "evaluate"])
+    p.add_argument("step", choices=["check", "select", "source-export", "select-by-image", "fetch", "upload", "status", "export", "evaluate"])
     p.add_argument("--config", required=True)
     p.add_argument("--only", help="comma-separated run ids")
     p.add_argument("--classes", help="comma-separated classes (upload/fetch)")
@@ -56,6 +56,14 @@ def main(argv=None):
     elif a.step == "select":
         from .select_images import select
         select(cfg, ROOT, a.config)
+
+    elif a.step == "source-export":
+        from .select_by_image import source_export
+        source_export(cfg, ROOT)
+
+    elif a.step == "select-by-image":
+        from .select_by_image import select_by_image
+        select_by_image(cfg, ROOT)
 
     elif a.step == "fetch":
         from .select_images import fetch
