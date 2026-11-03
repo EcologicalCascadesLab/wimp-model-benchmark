@@ -27,6 +27,8 @@ in `docs/upstream_suggestions.md`.
 
 ## By image vs by sequence
 
+Interactive version with charts: [comparison page](https://ecologicalcascadeslab.github.io/wimp-model-benchmark/results/comparison_awt_2026_11.html) (rebuild with `python -m wimpbench.compare_page results/awt_2026_11 results/awt_2026_11_by_image results/comparison_awt_2026_11.html`).
+
 | Run | Set | Animal recall | Animal precision | Blank recall | Blank precision† | Human recall | Human precision | Vehicle recall | Vehicle precision | No AI result | Median species F1* |
 |---|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|
 | PROD, Wet Tropics, MD default | by sequence | 0.77 | 0.96 | 0.34 | 0.21 | 0.86 | 0.34 | 0.62 | 0.94 | 6.5% | 0.65 |
