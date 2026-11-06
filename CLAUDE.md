@@ -4,7 +4,7 @@ Purpose: benchmark the WildObs WIMP computer-vision models (MegaDetector + speci
 
 ## Hard rules
 
-- Never commit API keys, tokens, images or Camtrap DP exports, and never commit personal names, camera/location names, coordinates, timestamps or media URLs from source projects (sensitive species and Indigenous data). The full image manifest stays in `state/` (git-ignored). Keys come only from the environment variables `WIMP_PROD_KEY` and `WIMP_TEST_KEY`. Images live in `data/` and exports in `Input_Data/`, both git-ignored.
+- Never commit API keys, tokens, images or Camtrap DP exports, and never commit personal names, coordinates or media URLs from source projects (sensitive species and Indigenous data). Camera/location names, deployment, sequence and media IDs and timestamps may be committed only for source projects Matthew has cleared as public (so far: the AWT 2025 Skye projects in `config/awt_2026_11*.yaml`, cleared 6 Nov 2026), in `results/<set>/provenance/` written by `wimpbench.provenance`. For any other source, ask Matthew first. The full image manifest stays in `state/` (git-ignored). Keys come only from the environment variables `WIMP_PROD_KEY` and `WIMP_TEST_KEY`. Images live in `data/` and exports in `Input_Data/`, both git-ignored.
 - Never edit `vendor/model-benchmark-testing-workflow` (Colin's repo, a pinned submodule). Extend it from `wimpbench/`; propose upstream changes as notes in `docs/upstream_suggestions.md`.
 - Never write to the source projects the validated images come from (e.g. Skye's AWT projects). They are read-only: GET requests only.
 - Only write to projects listed under `runs:` in the active config. Check the project ID before every write.
